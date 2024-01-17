@@ -132,7 +132,7 @@ class LoggerFactory implements PsrLoggerFactoryInterface
 
             $formatterClass = $handlerConfiguration['formatterClassName'] ?? false;
             if ($formatterClass) {
-                if (!class_exists($handlerClass)) {
+                if (!class_exists($formatterClass)) {
                     throw new InvalidConfigurationException(sprintf('The given formatter class "%s" does not exist, please check configuration for handler "%s".', $formatterClass, $identifier), 1702638212);
                 }
                 if (!$handler instanceof FormattableHandlerInterface) {
