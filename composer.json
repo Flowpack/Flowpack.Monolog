@@ -3,8 +3,9 @@
     "type": "neos-package",
     "description": "Monolog integration for Flow",
     "require": {
-        "neos/flow": "^5.0 || ^6.0 || ^7.0 || dev-master",
-        "monolog/monolog": "^1.23 || ^2.3"
+        "ext-json": "*",
+        "neos/flow": "^7.3 || ^8.0",
+        "monolog/monolog": "^2.3 || ^3.0"
     },
     "autoload": {
         "psr-4": {
