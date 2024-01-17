@@ -78,3 +78,29 @@ afterwards.
 
 For more information about handlers and their configuration check also the monolog [documentation on handlers, formatters & processors](https://seldaek.github.io/monolog/doc/02-handlers-formatters-processors.html).
  
+## Formatters
+
+To add a formatter to a handler, configure it like this:
+
+```yaml
+Neos:
+  Flow:
+    log:
+      psr3:
+        'Flowpack\Monolog\LoggerFactory':
+          '<name of the logger>':
+            handler:
+              '<identifier for this handler>':
+                className: '<monolog compatible handler class name fully qualified>'
+                arguments:
+                  0: '<the first argument given to the constructor of the handler>'
+                # any formatter compatible with monolog
+                formatterClassName: '<monolog compatible formatter class name fully qualified>'
+                # optional arguments for the formatter
+                formatterArguments:
+                  0: '<the first argument given to the constructor of the formatter>'
+```
+
+For this to work the used handler must implement monolog's `FormattableHandlerInterface`.
+
+For more information about formatters and their configuration check also the monolog [documentation on handlers, formatters & processors](https://seldaek.github.io/monolog/doc/02-handlers-formatters-processors.html).

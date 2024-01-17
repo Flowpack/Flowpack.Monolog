@@ -1,6 +1,7 @@
 <?php
 namespace Flowpack\Monolog;
 
+use Monolog\Handler\FormattableHandlerInterface;
 use Monolog\Handler\HandlerInterface;
 use Neos\Flow\Log\PsrLoggerFactoryInterface;
 use Neos\Flow\Annotations as Flow;
@@ -127,7 +128,23 @@ class LoggerFactory implements PsrLoggerFactoryInterface
             }
 
             $arguments = (isset($handlerConfiguration['arguments']) && is_array($handlerConfiguration['arguments'])) ? $handlerConfiguration['arguments'] : [];
-            $this->handlerInstances[$identifier] = new $handlerClass(...$arguments);
+            $handler = new $handlerClass(...$arguments);
+
+            $formatterClass = $handlerConfiguration['formatterClassName'] ?? false;
+            if ($formatterClass) {
+                if (!class_exists($handlerClass)) {
+                    throw new InvalidConfigurationException(sprintf('The given formatter class "%s" does not exist, please check configuration for handler "%s".', $formatterClass, $identifier), 1702638212);
+                }
+                if (!$handler instanceof FormattableHandlerInterface) {
+                    throw new InvalidConfigurationException(sprintf('The given handler class "%s" does not implement the FormattableHandlerInterface, please check configuration for handler "%s".', $handlerClass, $identifier), 1702638379);
+                }
+
+                $arguments = (isset($handlerConfiguration['formatterArguments']) && is_array($handlerConfiguration['formatterArguments'])) ? $handlerConfiguration['formatterArguments'] : [];
+                $formatter = new $formatterClass(...$arguments);
+                $handler->setFormatter($formatter);
+            }
+
+            $this->handlerInstances[$identifier] = $handler;
         }
 
         return $this->handlerInstances[$identifier];
